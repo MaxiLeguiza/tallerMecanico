@@ -1,6 +1,4 @@
 from flask import Flask;
-from flask_sqlalchemy import SQLAlchemy;
-from flask_cors import CORS; 
 from routes.cliente_routes import cliente_bp
 from routes.vehiculo_routes import vehiculo_bp
 from routes.reparaciones_routes import reparacion_bp
@@ -17,22 +15,24 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 #Registrar Blueprint
 
-app.register_blueprint(cliente_bp, url_prefix = '/api')
-app.register_blueprint(vehiculo_bp, url_prefix = '/api')
-app.register_blueprint(reparacion_bp, url_prefix = '/api')
-
+app.register_blueprint(cliente_bp)
+app.register_blueprint(vehiculo_bp)
+app.register_blueprint(reparacion_bp)
 
 
 # Ruta de prueba
+
 
 @app.route('/')
 def index():
     return {"mensaje" : "Bienvenidos a nuestro taller mecanico"}
 
-if __name__ == '_main_':
+baseDatos.init_app(app)
+
+with app.app_context():
+    baseDatos.create_all()
+    print("Tablas creadas exitosamente.")
+
+if __name__ == '__main__':
     app.run(debug=True)
 
-
-    #python
-#from app import db
-#db.create_all()

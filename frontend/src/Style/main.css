@@ -1,0 +1,15 @@
+/* Contenedor de grid */
+.grid-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr; /* Dos columnas iguales */
+    gap: 20px; /* Espacio entre columnas */
+    padding: 20px;
+  }
+  
+  /* Opcional: Estilos para los componentes */
+  .grid-container > * {
+    border: 1px solid #ccc;
+    padding: 20px;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+  }
