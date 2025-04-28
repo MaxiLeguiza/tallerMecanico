@@ -1,21 +1,43 @@
 import React from 'react'
 import { useState } from 'react'
+import Alerta from './Alerta'
 
 const Formulario = () => {
     const [nombre, setNombre] = useState('')
-    const [apellido, setApellido] = useState('')
-    const [telefono, setTelefono] = useState(0)
+    const [telefono, setTelefono] = useState('')
     const [email, setEmail] = useState('')
     const [domicilio, setDomicilio] = useState('')
 
-    const [alert, setAlerta] = useState({})
+    const [alerta, setAlerta] = useState({})
+
+    const handleSubmit = e => {
+        e.preventDefault()
+
+        //validar formulario
+        if([nombre,telefono,email,domicilio].includes('')){
+            setAlerta({
+                msg: 'Todos los campos son obligatorios',
+                error: true
+            })
+            return;
+        }
+        
+        setAlerta({})
+        
+    }
+
+    const {msg} = alerta
 
   return (
     <>
-    
+
     <form 
     className='text-left bg-white w-lg py-10 px-5 mb-10 shadow-md rounded-md'
+    onSubmit={handleSubmit}
     >
+    
+    {msg & <Alerta alerta = {alerta}/>}
+    
     <p className='text-lg text-left mb-10 uppercase font-bold'>
         Crear un Nuevo Cliente
     </p>
@@ -46,7 +68,7 @@ const Formulario = () => {
             placeholder='Telefono' 
             className='border-2 w-full p-2 mt-2 placeholder-gray-400 rounded-md'
             value={telefono}
-            onChange={e => setNombre(e.target.value)}
+            onChange={e => setTelefono(e.target.value)}
             />
 
         </div>
@@ -61,7 +83,7 @@ const Formulario = () => {
             placeholder='Email Cliente' 
             className='border-2 w-full p-2 mt-2 placeholder-gray-400 rounded-md'
             value={email}
-            onChange={e => setNombre(e.target.value)}
+            onChange={e => setEmail(e.target.value)}
             />
 
         </div>
@@ -76,7 +98,7 @@ const Formulario = () => {
             placeholder='Domicilio cliente' 
             className='border-2 w-full p-2 mt-2 placeholder-gray-400 rounded-md'
             value={domicilio}
-            onChange={e => setNombre(e.target.value)}
+            onChange={e => setDomicilio(e.target.value)}
             />
 
         </div>
