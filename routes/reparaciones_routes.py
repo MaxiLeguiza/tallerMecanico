@@ -1,12 +1,12 @@
 from flask import Blueprint, request, jsonify
-from models.reparaciones import reparacion
-from app import baseDatos
+from models.reparaciones import Reparacion
+from services.database import baseDatos
 
 reparacion_bp = Blueprint('reparacion', __name__)
 
 @reparacion_bp.route('/api/reparaciones', methods=['GET'])
 def obtener_reparaciones():
-    reparaciones = reparacion.query.all()
+    reparaciones = Reparacion.query.all()
     return jsonify([reparacion.to_dict() for reparacion in reparaciones])
 
 @reparacion_bp.route('/api/reparaciones/<int:id>', methods=['GET'])
@@ -20,7 +20,7 @@ def obtener_reparacion(id):
 @reparacion_bp.route('/reparaciones', methods=['POST'])
 def crear_reparacion():
     data = request.get_json()
-    reparacion_nueva = reparacion(
+    reparacion_nueva = Reparacion(
         vehiculo_id=data['vehiculo_id'],
         fecha=data['fecha'],
         descripcion=data['descripcion'],

@@ -1,13 +1,13 @@
-from app import baseDatos
+from services.database import baseDatos
 
-class reparacion(baseDatos.Model):
-    id = baseDatos.column(baseDatos.integer, primary_key=True)
-    vehiculo_id = baseDatos.column(baseDatos.integer, baseDatos.foreign_key('vehiculo.id'))
+class Reparacion(baseDatos.Model):
+    id = baseDatos.Column(baseDatos.Integer, primary_key=True)
+    vehiculo_id = baseDatos.Column(baseDatos.Integer, baseDatos.ForeignKey('vehiculo.id'))
     vehiculo = baseDatos.relationship('Vehiculo', backref='reparaciones')
-    fecha = baseDatos.column(baseDatos.date)
-    descripcion = baseDatos.column(baseDatos.string(100))
-    trabajos_realizados= baseDatos.column(baseDatos.string(100))
-    costo = baseDatos.column(baseDatos.float)
+    fecha = baseDatos.Column(baseDatos.Date)
+    descripcion = baseDatos.Column(baseDatos.String(100))
+    trabajos_realizados= baseDatos.Column(baseDatos.String(100))
+    costo = baseDatos.Column(baseDatos.Float)
 
     def to_dict(self):
         return {
