@@ -25,20 +25,17 @@ def crear_cliente():
     baseDatos.session.commit()
     return jsonify(cliente_nuevo.to_dict()), 201
 
-@cliente_bp.route('/api/delete_clientes/', methods=['DELETE'])
-def eliminar_cliente():
-    data = request.get_json()
-    cliente_id = data.get('id')
-    if not cliente_id:
-        return jsonify({"mensaje": "El campo 'id' es obligatorio"}), 400
+## Eliminar cliente por id
 
-    cliente = Cliente.query.get(cliente_id)
-    if cliente:
-        baseDatos.session.delete(cliente)
-        baseDatos.session.commit()
-        return jsonify({"mensaje": "Se eliminó el cliente"}), 200
-    else:
+@cliente_bp.route('/api/clientes/<int:id>', methods=['DELETE'])
+def elimina_un_cliente(id):
+    cliente = Cliente.query.get(id)
+    if not cliente:
         return jsonify({"mensaje": "Cliente no encontrado"}), 404
+
+    baseDatos.session.delete(cliente)
+    baseDatos.session.commit()
+    return jsonify({"mensaje": "Cliente eliminado correctamente"}), 200
 
 @cliente_bp.route('/api/update_clientes', methods=['PUT'])
 def actualizar_cliente():

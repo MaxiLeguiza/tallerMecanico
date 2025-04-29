@@ -22,6 +22,29 @@ const ListaDeRegistros = () => {
     }
   };
 
+  // Función para eliminar un registro
+  const eliminarRegistro = async (id) => {
+    const confirmar = window.confirm("¿Estás seguro de que deseas eliminar este registro?");
+    if (!confirmar) return;
+
+    try {
+      const response = await fetch(`http://127.0.0.1:5000/api/clientes/${id}`, {
+        method: "DELETE",
+      });
+
+      if (!response.ok) {
+        throw new Error("Error al eliminar el registro");
+      }
+
+      // Actualizar la lista de registros después de eliminar
+      setRegistros((prevRegistros) => prevRegistros.filter((registro) => registro.id !== id));
+      alert("Registro eliminado correctamente");
+    } catch (error) {
+      console.error("Error:", error);
+      alert("Hubo un error al eliminar el registro");
+    }
+  };
+
   return (
     <div>
       <h1>Listado de Registros</h1>
@@ -52,6 +75,14 @@ const ListaDeRegistros = () => {
                 <td>{registro.telefono}</td>
                 <td>{registro.email}</td>
                 <td>{registro.direccion}</td>
+                <td>
+                  <button
+                    onClick={() => eliminarRegistro(registro.id)}
+                    className="bg-red-600 text-white p-2 rounded hover:bg-red-800"
+                  >
+                    Eliminar
+                  </button>
+                </td>
               </tr>
             ))}
           </tbody>
