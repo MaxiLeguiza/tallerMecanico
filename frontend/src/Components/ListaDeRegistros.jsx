@@ -1,8 +1,6 @@
 import React from "react";
 import { useState } from "react";
 
-
-
 const ListaDeRegistros = () => {
   const [registros, setRegistros] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -28,7 +26,7 @@ const ListaDeRegistros = () => {
     <div>
       <h1>Listado de Registros</h1>
       {/* Botón para traer los registros */}
-      <button onClick={fetchRegistros}  className="btnActualizar" style={{ marginBottom: "20px" }}>
+      <button onClick={fetchRegistros} style={{ marginBottom: "20px" }}>
         Actualizar
       </button>
 
