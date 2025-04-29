@@ -2,13 +2,10 @@ import React from 'react'
 import { useState } from 'react'
 import Alerta from './Alerta'
 
+
 const Formulario = () => {
     const [nombre, setNombre] = useState('')
-<<<<<<< HEAD:frontend/src/Formulario.jsx
     const [telefono, setTelefono] = useState('')
-=======
-    const [telefono, setTelefono] = useState(0)
->>>>>>> 0011fa56c37dfbb0a0633a74ef79c251f1222450:frontend/src/Components/Formulario.jsx
     const [email, setEmail] = useState('')
     const [domicilio, setDomicilio] = useState('')
 
