@@ -1,6 +1,6 @@
 import React from 'react'
 import { useState } from 'react'
-//import Alerta from './Alerta';
+import Alerta from './Alerta';
 
 
 const Formulario = () => {
