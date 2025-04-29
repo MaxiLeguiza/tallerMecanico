@@ -4,9 +4,11 @@ from routes.vehiculo_routes import vehiculo_bp
 from routes.reparaciones_routes import reparacion_bp
 from services.config import DATABASE_CONNECTION_URI
 from services.database import baseDatos
+from flask_cors import CORS;
 
 
 app = Flask(__name__)
+CORS(app)
 
 # Configuración de la base de datos
 
