@@ -26,7 +26,8 @@ const ListaDeRegistros = () => {
     <div>
       <h1>Listado de Registros</h1>
       {/* Botón para traer los registros */}
-      <button onClick={fetchRegistros} style={{ marginBottom: "20px" }}>
+      <button onClick={fetchRegistros} className="bg-blue-800 p-3 w-full mt-6 text-white font-bold uppercase hover:bg-blue-950 rounded-md 
+            cursor-pointer transition-colors" style={{ marginBottom: "20px" }}>
         Actualizar
       </button>
 
