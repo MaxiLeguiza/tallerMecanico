@@ -2,6 +2,7 @@ import React from 'react'
 import { useState } from 'react'
 //import Alerta from './Alerta';
 
+
 const Formulario = () => {
     const [nombre, setNombre] = useState('')
     const [telefono, setTelefono] = useState('')
