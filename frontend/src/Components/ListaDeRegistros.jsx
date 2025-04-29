@@ -1,7 +1,7 @@
 import React from "react";
 import { useState } from "react";
 
-const ListaDeRegistros = ({ registros, fetchRegistros, editarRegistro }) => {
+const ListaDeRegistros = () => {
   const [registros, setRegistros] = useState([]);
   const [loading, setLoading] = useState(false);
 
@@ -52,9 +52,6 @@ const ListaDeRegistros = ({ registros, fetchRegistros, editarRegistro }) => {
                 <td>{registro.telefono}</td>
                 <td>{registro.email}</td>
                 <td>{registro.direccion}</td>
-                <td>
-                  <button onClick={() => editarRegistro(registro)}>Editar</button>
-                </td>
               </tr>
             ))}
           </tbody>
