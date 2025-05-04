@@ -4,10 +4,14 @@ from services.database import baseDatos
 
 cliente_bp = Blueprint('cliente', __name__)
 
+# traer clientes - Todo el listado de clientes
+
 @cliente_bp.route('/api/clientes', methods=['GET'])
 def obtener_clientes():
     clientes = Cliente.query.all()
     return jsonify([cliente.to_dict() for cliente in clientes])
+
+##Crear nuevo cliente
 
 @cliente_bp.route('/api/add_clientes', methods=['POST'])
 def crear_cliente():
@@ -37,14 +41,15 @@ def elimina_un_cliente(id):
     baseDatos.session.commit()
     return jsonify({"mensaje": "Cliente eliminado correctamente"}), 200
 
-@cliente_bp.route('/api/update_clientes', methods=['PUT'])
-def actualizar_cliente():
-    data = request.get_json()
-    cliente_id = data.get('id')
-    if not cliente_id:
-        return jsonify({"mensaje": "El campo 'id' es obligatorio"}), 400
+## Actualizar cliente por id
 
-    cliente = Cliente.query.get(cliente_id)
+@cliente_bp.route('/api/clientes/<int:id>', methods=['PUT'])
+def actualizar_cliente(id):
+    data = request.get_json()
+    if not data:
+        return jsonify({"mensaje": "No se enviaron datos para actualizar"}), 400
+
+    cliente = Cliente.query.get(id)
     if cliente:
         cliente.nombre = data.get('nombre', cliente.nombre)
         cliente.telefono = data.get('telefono', cliente.telefono)

@@ -4,6 +4,9 @@ import { useState } from "react";
 const ListaDeRegistros = () => {
   const [registros, setRegistros] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [registroSeleccionado, setRegistroSeleccionado] = useState(null);
+  const [modalVisible, setModalVisible] = useState(false);
+
 
   // Función para obtener los registros del backend
   const fetchRegistros = async () => {
@@ -45,6 +48,54 @@ const ListaDeRegistros = () => {
     }
   };
 
+  // Función para manejar la edición de un registro
+  const editarRegistro = (id) => {
+    const registro = registros.find((registro) => registro.id === id);
+    if (registro) {
+      setRegistroSeleccionado(registro);
+      setModalVisible(true); // Mostrar el modal
+    }
+  };
+
+    // Función para manejar los cambios en los inputs del formulario
+    const handleInputChange = (e) => {
+      const { name, value } = e.target;
+      setRegistroSeleccionado((prev) => ({
+        ...prev,
+        [name]: value,
+      }));
+    };
+
+    // Función para guardar los cambios en el backend
+  const guardarCambios = async () => {
+    try {
+      const response = await fetch(`http://127.0.0.1:5000//api/clientes/${registroSeleccionado.id}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(registroSeleccionado),
+      });
+
+      if (!response.ok) {
+        throw new Error("Error al guardar los cambios");
+      }
+
+      // Actualizar la lista de registros con los datos modificados
+      setRegistros((prevRegistros) =>
+        prevRegistros.map((registro) =>
+          registro.id === registroSeleccionado.id ? registroSeleccionado : registro
+        )
+      );
+
+      alert("Cambios guardados correctamente");
+      setModalVisible(false); // Cerrar el modal
+    } catch (error) {
+      console.error("Error:", error);
+      alert("Hubo un error al guardar los cambios");
+    }
+  };
+
   return (
     <div>
       <h1>Listado de Registros</h1>
@@ -83,6 +134,14 @@ const ListaDeRegistros = () => {
                     Eliminar
                   </button>
                 </td>
+                <td>
+                <button
+                    onClick={() => editarRegistro(registro.id)}
+                    className="bg-green-600 text-white p-2 rounded hover:bg-green-800"
+                  >
+                    Editar
+                  </button>
+                </td>
               </tr>
             ))}
           </tbody>
@@ -90,6 +149,77 @@ const ListaDeRegistros = () => {
       ) : (
         <p>No hay registros disponibles.</p>
       )}
+
+
+      {/* Modal para editar registro */}
+      {modalVisible && registroSeleccionado && (
+        <div
+          style={{
+            position: "fixed",
+            top: "50%",
+            left: "50%",
+            transform: "translate(-50%, -50%)",
+            backgroundColor: "white",
+            padding: "20px",
+            borderRadius: "10px",
+            boxShadow: "0 4px 8px rgba(0, 0, 0, 0.2)",
+            zIndex: 1000,
+          }}
+        >
+          <h2>Editar Registro</h2>
+          <label>
+            Nombre:
+            <input
+              type="text"
+              name="nombre"
+              value={registroSeleccionado.nombre}
+              onChange={handleInputChange}
+              style={{ display: "block", marginBottom: "10px" }}
+            />
+          </label>
+          <label>
+            Teléfono:
+            <input
+              type="text"
+              name="telefono"
+              value={registroSeleccionado.telefono}
+              onChange={handleInputChange}
+              style={{ display: "block", marginBottom: "10px" }}
+            />
+          </label>
+          <label>
+            Email:
+            <input
+              type="email"
+              name="email"
+              value={registroSeleccionado.email}
+              onChange={handleInputChange}
+              style={{ display: "block", marginBottom: "10px" }}
+            />
+          </label>
+          <label>
+            Dirección:
+            <input
+              type="text"
+              name="direccion"
+              value={registroSeleccionado.direccion}
+              onChange={handleInputChange}
+              style={{ display: "block", marginBottom: "10px" }}
+            />
+          </label>
+          <button onClick={guardarCambios} className="bg-blue-600 text-white p-2 rounded hover:bg-blue-800">
+            Guardar Cambios
+          </button>
+          <button
+            onClick={() => setModalVisible(false)}
+            className="bg-gray-600 text-white p-2 rounded hover:bg-gray-800"
+            style={{ marginLeft: "10px" }}
+          >
+            Cancelar
+          </button>
+        </div>
+      )}
+
     </div>
   );
 };
