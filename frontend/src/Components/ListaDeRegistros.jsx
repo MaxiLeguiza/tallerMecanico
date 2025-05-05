@@ -1,5 +1,6 @@
 import React from "react";
-import { useState } from "react";
+import { useState , useEffect} from "react";
+
 
 const ListaDeRegistros = () => {
   const [registros, setRegistros] = useState([]);
@@ -8,7 +9,7 @@ const ListaDeRegistros = () => {
   const [modalVisible, setModalVisible] = useState(false);
 
 
-  // Función para obtener los registros del backend
+  // Función para obtener todo los registros del backend
   const fetchRegistros = async () => {
     setLoading(true); // Mostrar mensaje de carga
     try {
@@ -24,6 +25,11 @@ const ListaDeRegistros = () => {
       setLoading(false); // Ocultar mensaje de carga
     }
   };
+
+    // Cargar registros al montar el componente
+    useEffect(() => {
+      fetchRegistros();
+    }, []);
 
   // Función para eliminar un registro
   const eliminarRegistro = async (id) => {
@@ -99,16 +105,11 @@ const ListaDeRegistros = () => {
   return (
     <div>
       <h1>Listado de Registros</h1>
-      {/* Botón para traer los registros */}
-      <button onClick={fetchRegistros} className="bg-blue-800 p-3 w-full mt-6 text-white font-bold uppercase hover:bg-blue-950 rounded-md 
-            cursor-pointer transition-colors" style={{ marginBottom: "20px" }}>
-        Actualizar
-      </button>
-
+      <br />
       {loading ? (
         <p>Un momento... Los registros se están cargando.</p>
       ) : registros.length > 0 ? (
-        <table border="1" style={{ width: "100%", textAlign: "left" }}>
+        <table border="1" style={{ width: "100%", textAlign: "center" }}>
           <thead>
             <tr>
               <th>ID</th>
@@ -157,10 +158,10 @@ const ListaDeRegistros = () => {
           style={{
             position: "fixed",
             top: "50%",
-            left: "50%",
+            left: "70%",
             transform: "translate(-50%, -50%)",
             backgroundColor: "white",
-            padding: "20px",
+            padding: "50px",
             borderRadius: "10px",
             boxShadow: "0 4px 8px rgba(0, 0, 0, 0.2)",
             zIndex: 1000,
@@ -174,7 +175,7 @@ const ListaDeRegistros = () => {
               name="nombre"
               value={registroSeleccionado.nombre}
               onChange={handleInputChange}
-              style={{ display: "block", marginBottom: "10px" }}
+              style={{ display: "block", marginBottom: "10px"  }}
             />
           </label>
           <label>
