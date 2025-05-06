@@ -56,3 +56,17 @@ def eliminar_vehiculo(id):
         return jsonify({"mensaje": "Vehículo eliminado"}), 200
     else:
         return jsonify({"mensaje": "Vehículo no encontrado"}), 404
+    
+@vehiculo_bp.route('/vehiculos/matricula/<string:matricula>', methods=['GET'])
+def obtener_vehiculo_por_matricula(matricula):
+    vehiculo = Vehiculo.query.filter_by(matricula=matricula).first()
+    if vehiculo:
+        cliente = vehiculo.cliente.to_dict() if vehiculo.cliente else None
+        reparaciones = [reparacion.to_dict() for reparacion in vehiculo.reparaciones]
+        return jsonify({
+            "vehiculo": vehiculo.to_dict(),
+            "cliente": cliente,
+            "reparaciones": reparaciones
+        }), 200
+    else:
+        return jsonify({"mensaje": "Vehículo no encontrado"}), 404
