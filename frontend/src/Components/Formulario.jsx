@@ -59,21 +59,15 @@ const Formulario = () => {
         }
       };
     
+      const { msg } = alerta
+
       return (
         <>
           <form
             className="text-left bg-white w-lg py-10 px-5 mb-10 shadow-md rounded-md"
             onSubmit={handleSubmit}
           >
-            {alerta && (
-              <p
-                className={`${
-                  alerta.error ? "text-red-500" : "text-green-500"
-                } font-bold`}
-              >
-                {alerta.msg}
-              </p>
-            )}
+            {alerta && <Alerta alerta={alerta}/>}
     
             <p className="text-lg text-left mb-10 uppercase font-bold">
               Crear un Nuevo Cliente

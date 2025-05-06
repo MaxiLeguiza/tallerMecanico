@@ -1,0 +1,230 @@
+import React from "react";
+import { useState , useEffect} from "react";
+
+
+const ListaDeVehiculos = () => {
+  const [registros, setRegistros] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [registroSeleccionado, setRegistroSeleccionado] = useState(null);
+  const [modalVisible, setModalVisible] = useState(false);
+
+
+  // Función para obtener todo los registros del backend
+  const fetchRegistros = async () => {
+    setLoading(true); // Mostrar mensaje de carga
+    try {
+      const response = await fetch("http://127.0.0.1:5000/api/clientes"); // Cambia la URL según tu endpoint
+      if (!response.ok) {
+        throw new Error("Ups! No se pudo obtener la información.");
+      }
+      const datos = await response.json();
+      setRegistros(datos);
+    } catch (error) {
+      console.error("Error:", error);
+    } finally {
+      setLoading(false); // Ocultar mensaje de carga
+    }
+  };
+
+    // Cargar registros al montar el componente
+    useEffect(() => {
+      fetchRegistros();
+    }, []);
+
+  // Función para eliminar un registro
+  const eliminarRegistro = async (id) => {
+    const confirmar = window.confirm("¿Estás seguro de que deseas eliminar este registro?");
+    if (!confirmar) return;
+
+    try {
+      const response = await fetch(`http://127.0.0.1:5000/vehiculos/${id}`, {
+        method: "DELETE",
+      });
+
+      if (!response.ok) {
+        throw new Error("Error al eliminar el registro");
+      }
+
+      // Actualizar la lista de registros después de eliminar
+      setRegistros((prevRegistros) => prevRegistros.filter((registro) => registro.id !== id));
+      alert("Vehiculo eliminado correctamente");
+    } catch (error) {
+      console.error("Error:", error);
+      alert("Hubo un error al eliminar el vehiculo");
+    }
+  };
+
+  // Función para manejar la edición de un registro
+  const editarRegistro = (id) => {
+    const registro = registros.find((registro) => registro.id === id);
+    if (registro) {
+      setRegistroSeleccionado(registro);
+      setModalVisible(true); // Mostrar el modal
+    }
+  };
+
+    // Función para manejar los cambios en los inputs del formulario
+    const handleInputChange = (e) => {
+      const { name, value } = e.target;
+      setRegistroSeleccionado((prev) => ({
+        ...prev,
+        [name]: value,
+      }));
+    };
+
+    // Función para guardar los cambios en el backend
+  const guardarCambios = async () => {
+    try {
+      const response = await fetch(`http://127.0.0.1:5000/vehiculos/${registroSeleccionado.id}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(registroSeleccionado),
+      });
+
+      if (!response.ok) {
+        throw new Error("Error al guardar los cambios");
+      }
+
+      // Actualizar la lista de registros con los datos modificados
+      setRegistros((prevRegistros) =>
+        prevRegistros.map((registro) =>
+          registro.id === registroSeleccionado.id ? registroSeleccionado : registro
+        )
+      );
+
+      alert("Cambios guardados correctamente");
+      setModalVisible(false); // Cerrar el modal
+    } catch (error) {
+      console.error("Error:", error);
+      alert("Hubo un error al guardar los cambios");
+    }
+  };
+
+  return (
+    <div>
+      <h1>Listado de Registros</h1>
+      <br />
+      {loading ? (
+        <p>Un momento... Los registros se están cargando.</p>
+      ) : registros.length > 0 ? (
+        <table border="1" style={{ width: "100%", textAlign: "center" }}>
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Marca</th>
+              <th>Modelo</th>
+              <th>Año</th>
+              <th>Patente</th>
+              <th>Cliente</th>
+            </tr>
+          </thead>
+          <tbody>
+            {registros.map((registro) => (
+              <tr key={registro.id}>
+                <td>{registro.id}</td>
+                <td>{registro.marca}</td>
+                <td>{registro.modelo}</td>
+                <td>{registro.año}</td>
+                <td>{registro.patente}</td>
+                <td>{registro.cliente_id}</td>
+                <td>
+                  <button
+                    onClick={() => eliminarRegistro(registro.id)}
+                    className="bg-red-600 text-white p-2 rounded hover:bg-red-800"
+                  >
+                    Eliminar
+                  </button>
+                </td>
+                <td>
+                <button
+                    onClick={() => editarRegistro(registro.id)}
+                    className="bg-green-600 text-white p-2 rounded hover:bg-green-800"
+                  >
+                    Editar
+                  </button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      ) : (
+        <p>No hay registros disponibles.</p>
+      )}
+
+
+      {/* Modal para editar registro */}
+      {modalVisible && registroSeleccionado && (
+        <div
+          style={{
+            position: "fixed",
+            top: "50%",
+            left: "70%",
+            transform: "translate(-50%, -50%)",
+            backgroundColor: "white",
+            padding: "50px",
+            borderRadius: "10px",
+            boxShadow: "0 4px 8px rgba(0, 0, 0, 0.2)",
+            zIndex: 1000,
+          }}
+        >
+          <h2>Editar Registro</h2>
+          <label>
+            Marca:
+            <input
+              type="text"
+              name="marca"
+              value={registroSeleccionado.marca}
+              onChange={handleInputChange}
+              style={{ display: "block", marginBottom: "10px"  }}
+            />
+          </label>
+          <label>
+            Modelo:
+            <input
+              type="text"
+              name="modelo"
+              value={registroSeleccionado.modelo}
+              onChange={handleInputChange}
+              style={{ display: "block", marginBottom: "10px" }}
+            />
+          </label>
+          <label>
+            Año:
+            <input
+              type="email"
+              name="año"
+              value={registroSeleccionado.año}
+              onChange={handleInputChange}
+              style={{ display: "block", marginBottom: "10px" }}
+            />
+          </label>
+          <label>
+            Patente:
+            <input
+              type="text"
+              name="patente"
+              value={registroSeleccionado.patente}
+              onChange={handleInputChange}
+              style={{ display: "block", marginBottom: "10px" }}
+            />
+          </label>
+          <button onClick={guardarCambios} className="bg-blue-600 text-white p-2 rounded hover:bg-blue-800">
+            Guardar Cambios
+          </button>
+          <button
+            onClick={() => setModalVisible(false)}
+            className="bg-gray-600 text-white p-2 rounded hover:bg-gray-800"
+            style={{ marginLeft: "10px" }}
+          >
+            Cancelar
+          </button>
+        </div>
+      )}
+
+    </div>
+  );
+};
+
+export default ListaDeVehiculos;
