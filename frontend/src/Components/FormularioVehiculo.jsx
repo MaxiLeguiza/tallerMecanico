@@ -104,7 +104,7 @@ const FormularioVehiculo = () => {
                  placeholder="Modelo"
                  className="border-2 w-full p-2 mt-2 placeholder-gray-400 rounded-md"
                  value={modelo}
-                 onChange={(e) => setTelefono(e.target.value)}
+                 onChange={(e) =>  setModelo(e.target.value)}
                />
              </div>
              <div className="mb-5">

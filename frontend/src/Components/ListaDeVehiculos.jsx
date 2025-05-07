@@ -13,7 +13,7 @@ const ListaDeVehiculos = () => {
   const fetchRegistros = async () => {
     setLoading(true); // Mostrar mensaje de carga
     try {
-      const response = await fetch("http://127.0.0.1:5000/api/clientes"); // Cambia la URL según tu endpoint
+      const response = await fetch("http://127.0.0.1:5000/vehiculos"); // Cambia la URL según tu endpoint
       if (!response.ok) {
         throw new Error("Ups! No se pudo obtener la información.");
       }

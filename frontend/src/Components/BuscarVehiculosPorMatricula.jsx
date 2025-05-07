@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import "./../Style/estiloDeLista.css"; // Importar el archivo de estilos
 
 const BuscarVehiculoPorMatricula = () => {
-  const [matricula, setMatricula] = useState("");
+  const [patente, setPatente] = useState("");
   const [vehiculo, setVehiculo] = useState(null);
   const [cliente, setCliente] = useState(null);
   const [reparaciones, setReparaciones] = useState([]);
@@ -10,13 +10,13 @@ const BuscarVehiculoPorMatricula = () => {
 
   // Función para buscar el vehículo por matrícula
   const buscarVehiculo = async () => {
-    if (!matricula) {
+    if (!patente) {
       alert("Por favor, ingresa una matrícula.");
       return;
     }
 
     try {
-      const response = await fetch(`http://127.0.0.1:5000/vehiculos/matricula/${matricula}`);
+      const response = await fetch(`http://127.0.0.1:5000/vehiculos/patente/${patente}`);
       if (!response.ok) {
         throw new Error("No se encontró el vehículo o hubo un error en la búsqueda.");
       }
@@ -41,9 +41,9 @@ const BuscarVehiculoPorMatricula = () => {
       <div style={{ marginBottom: "20px" }}>
         <input
           type="text"
-          placeholder="Ingresa la matrícula del vehículo"
-          value={matricula}
-          onChange={(e) => setMatricula(e.target.value)}
+          placeholder="Ingresa la patente del vehículo"
+          value={patente}
+          onChange={(e) => setPatente(e.target.value)}
           style={{ padding: "10px", marginRight: "10px", width: "300px" }}
         />
         <button onClick={buscarVehiculo} className="bg-orange-600 text-white p-2 rounded hover:bg-blue-800">
@@ -69,7 +69,7 @@ const BuscarVehiculoPorMatricula = () => {
             <tbody>
               <tr>
                 <td>{vehiculo.id}</td>
-                <td>{vehiculo.matricula}</td>
+                <td>{vehiculo.patente}</td>
                 <td>{vehiculo.marca}</td>
                 <td>{vehiculo.modelo}</td>
                 <td>{vehiculo.anio}</td>

@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom"
+import BuscarVehiculoPorMatricula from "../Components/BuscarVehiculosPorMatricula"
 
 function ReparacionesPage() {
   return (
@@ -15,6 +16,9 @@ function ReparacionesPage() {
         </div>
       </header>
 
+      <div className='grid-container'>
+        <div><BuscarVehiculoPorMatricula/></div>
+        </div>
      
     </div>
   )

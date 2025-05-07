@@ -54,16 +54,6 @@ def buscar_cliente_por_nombre(nombre):
         print("Cliente no encontrado")
         return jsonify({"mensaje": "Cliente no encontrado"}), 404
 
-@cliente_bp.route('/api/clientes/<int:id>', methods=['DELETE'])
-def elimina_un_cliente(id):
-    cliente = Cliente.query.get(id)
-    if not cliente:
-        return jsonify({"mensaje": "Cliente no encontrado"}), 404
-
-    baseDatos.session.delete(cliente)
-    baseDatos.session.commit()
-    return jsonify({"mensaje": "Cliente eliminado correctamente"}), 200
-
 ## Actualizar cliente por id
 
 @cliente_bp.route('/api/clientes/<int:id>', methods=['PUT'])
